@@ -23,6 +23,7 @@
             class="rounded"
           />
           <span class="mx-3 text-success lighten-30">{{ account.name || user.name }}</span>
+          <h1>{{ user.id }}</h1>
         </div>
       </div>
       <div

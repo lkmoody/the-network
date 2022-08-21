@@ -1,5 +1,6 @@
 <template>
   <div class="col-md-10">
+    <PostForm v-if="user.isAuthenticated" />
     <PostCard v-for="p in posts" :post="p" />
     <button @click="handlePrev()">Prev</button>
     {{ postPage }}
@@ -15,6 +16,7 @@ import { postService } from '../services/PostService.js';
 import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import PostCard from '../components/PostCard.vue';
+import PostForm from '../components/PostForm.vue';
 
 export default {
   setup() {
@@ -40,7 +42,6 @@ export default {
 
     async function handleNext() {
       postPage.value++;
-      console.log(postPage.value)
       getPosts(postPage.value);
     }
 
@@ -50,13 +51,14 @@ export default {
 
     return {
       name: "Home",
+      user: computed(() => AppState.user),
       posts: computed(() => AppState.posts),
       postPage,
       handlePrev,
       handleNext
     };
   },
-  components: { PostCard }
+  components: { PostCard, PostForm }
 }
 </script>
 
