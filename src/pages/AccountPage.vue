@@ -13,6 +13,7 @@ export default {
   name: 'Account',
   setup() {
     return {
+      name: "Account",
       account: computed(() => AppState.account)
     }
   }

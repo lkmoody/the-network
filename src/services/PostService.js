@@ -4,11 +4,11 @@ import { Profile } from "../models/Profile.js";
 import { api } from "./AxiosService.js";
 import { profileService } from "./ProfileService.js";
 
-const POST_URL = '/api/posts';
+const POST_URL = '/api/posts?page=';
 
 class PostService {
-    async getPosts() {
-        const response = await api.get(POST_URL);       
+    async getPosts(page) {
+        const response = await api.get(`${POST_URL}${page}`);       
         //const posts = [];
         for (let i = 0; i < response.data.posts.length; i++) {
             const p = response.data.posts[i];

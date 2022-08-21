@@ -1,12 +1,15 @@
 <template>
-  <div class="col-md-10" v-for="p in posts" :key="p.id">
-    <PostCard :post="p" />
+  <div class="col-md-10">
+    <PostCard v-for="p in posts" :post="p" />
+    <button @click="handlePrev()">Prev</button>
+    {{ postPage }}
+    <button @click="handleNext()">Next</button>
   </div>
 </template>
 
 <script>
 import { computed } from '@vue/reactivity';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { AppState } from '../AppState';
 import { postService } from '../services/PostService.js';
 import { logger } from '../utils/Logger';
@@ -14,24 +17,46 @@ import Pop from '../utils/Pop';
 import PostCard from '../components/PostCard.vue';
 
 export default {
-    setup() {
-        async function getPosts() {
-            try {
-                await postService.getPosts();
-            }
-            catch (error) {
-                logger.error("Getting Posts", error);
-                Pop.error(error);
-            }
-        }
-        onMounted(() => {
-            getPosts();
-        });
-        return {
-            posts: computed(() => AppState.posts)
-        };
-    },
-    components: { PostCard }
+  setup() {
+    const postPage = ref(1);
+
+    async function getPosts(page) {
+      try {
+        await postService.getPosts(page);
+        window.scrollTo({top: 0, behavior: "smooth"});
+      }
+      catch (error) {
+        logger.error("Getting Posts", error);
+        Pop.error(error);
+      }
+    }
+
+    async function handlePrev() {
+      if (postPage.value > 1) {
+        postPage.value--;
+        getPosts(postPage.value);
+      }
+    }
+
+    async function handleNext() {
+      postPage.value++;
+      console.log(postPage.value)
+      getPosts(postPage.value);
+    }
+
+    onMounted(() => {
+      getPosts(postPage.value);
+    });
+
+    return {
+      name: "Home",
+      posts: computed(() => AppState.posts),
+      postPage,
+      handlePrev,
+      handleNext
+    };
+  },
+  components: { PostCard }
 }
 </script>
 

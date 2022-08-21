@@ -1,7 +1,9 @@
 <template>
   <span>
     <div>
-      <img :src="post.creatorProfile.picture" />
+      <router-link :to="{ name: 'Profile', params: { profileId: post.creatorProfile.id } }">
+        <img :src="post.creatorProfile.picture" />
+      </router-link>
       <h4>{{ post.creatorProfile.name }}</h4>
       <p>{{ post.createdAt }}</p>
       <p>{{ post.likeIds.length }}</p>
